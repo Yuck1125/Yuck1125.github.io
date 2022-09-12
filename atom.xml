@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Yuck的日常</title>
+  
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://Yuck1125.github.io/"/>
+  <updated>2022-09-12T03:13:50.992Z</updated>
+  <id>http://Yuck1125.github.io/</id>
+  
+  <author>
+    <name>Yuck</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>泛型桥接方法验证</title>
+    <link href="http://Yuck1125.github.io/2019/11/25/JAVA-bridge-method/"/>
+    <id>http://Yuck1125.github.io/2019/11/25/JAVA-bridge-method/</id>
+    <published>2019-11-25T03:30:08.000Z</published>
+    <updated>2022-09-12T03:13:50.992Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;简单验证&quot;&gt;&lt;a href=&quot;#简单验证&quot; class=&quot;headerlink&quot; title=&quot;简单验证&quot;&gt;&lt;/a&gt;简单验证&lt;/h3&gt;&lt;figure class=&quot;highlight plain&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="JAVA" scheme="http://Yuck1125.github.io/tags/JAVA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用HSDB验证Class对象和类的静态对象保存在堆中</title>
+    <link href="http://Yuck1125.github.io/2019/10/17/use-HSDB-verify-Class-in-heap/"/>
+    <id>http://Yuck1125.github.io/2019/10/17/use-HSDB-verify-Class-in-heap/</id>
+    <published>2019-10-17T06:28:10.000Z</published>
+    <updated>2022-09-12T03:13:50.994Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;HSDB-Hotspot-Debugger&quot;&gt;&lt;a href=&quot;#HSDB-Hotspot-Debugger&quot; class=&quot;headerlink&quot; title=&quot;HSDB(Hotspot Debugger)&quot;&gt;&lt;/a&gt;HSDB(Hotspot
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="java" scheme="http://Yuck1125.github.io/tags/java/"/>
+    
+      <category term="JVM" scheme="http://Yuck1125.github.io/tags/JVM/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>InnoDB锁类型</title>
+    <link href="http://Yuck1125.github.io/2019/08/22/innodb-lock-type/"/>
+    <id>http://Yuck1125.github.io/2019/08/22/innodb-lock-type/</id>
+    <published>2019-08-22T09:28:43.000Z</published>
+    <updated>2022-09-12T03:13:50.994Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h4 id=&quot;1-Shared-and-Exclusive-Locks&quot;&gt;&lt;a href=&quot;#1-Shared-and-Exclusive-Locks&quot; class=&quot;headerlink&quot; title=&quot;1. Shared and Exclusive
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="mysql" scheme="http://Yuck1125.github.io/tags/mysql/"/>
+    
+      <category term="innodb" scheme="http://Yuck1125.github.io/tags/innodb/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>git 打标签的注意点</title>
+    <link href="http://Yuck1125.github.io/2019/08/20/git-tag-notice/"/>
+    <id>http://Yuck1125.github.io/2019/08/20/git-tag-notice/</id>
+    <published>2019-08-20T04:32:36.000Z</published>
+    <updated>2022-09-12T03:13:50.993Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;问题&quot;&gt;&lt;a href=&quot;#问题&quot; class=&quot;headerlink&quot; title=&quot;问题&quot;&gt;&lt;/a&gt;问题&lt;/h3&gt;&lt;p&gt;   tag的名字不要和分支一样… 我遇到的情况就是 不能正常merge,提示&lt;code&gt;refname &amp;#39;xxx&amp;#39; is
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="git" scheme="http://Yuck1125.github.io/tags/git/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>记MultipartException一次导致nginx500错误</title>
+    <link href="http://Yuck1125.github.io/2019/08/04/nginx-500-due-to-zull-MultipartException/"/>
+    <id>http://Yuck1125.github.io/2019/08/04/nginx-500-due-to-zull-MultipartException/</id>
+    <published>2019-08-04T13:14:50.000Z</published>
+    <updated>2022-09-12T03:13:50.994Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;最近写了一个上传文件的接口，在小程序访问的时候,nginx报了500。看了nginx的 &lt;code&gt;error log&lt;/code&gt;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Exception" scheme="http://Yuck1125.github.io/tags/Exception/"/>
+    
+      <category term="nginx" scheme="http://Yuck1125.github.io/tags/nginx/"/>
+    
+      <category term="zull" scheme="http://Yuck1125.github.io/tags/zull/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>InnoDB 内存和磁盘结构介绍</title>
+    <link href="http://Yuck1125.github.io/2019/07/20/InnoDB-In-memory-and-on-disk-structures/"/>
+    <id>http://Yuck1125.github.io/2019/07/20/InnoDB-In-memory-and-on-disk-structures/</id>
+    <published>2019-07-20T13:11:47.000Z</published>
+    <updated>2022-09-12T03:13:50.991Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h3&gt;&lt;p&gt;&amp;emsp;&amp;emsp;本来只是想了解下redo、undo
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="InnoDB" scheme="http://Yuck1125.github.io/tags/InnoDB/"/>
+    
+      <category term="Mysql" scheme="http://Yuck1125.github.io/tags/Mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>分布式事务（XA、2PC、3PC介绍）</title>
+    <link href="http://Yuck1125.github.io/2019/07/15/XA-2PC-3PC/"/>
+    <id>http://Yuck1125.github.io/2019/07/15/XA-2PC-3PC/</id>
+    <published>2019-07-15T03:18:13.000Z</published>
+    <updated>2022-09-12T03:13:50.993Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;XA简单介绍&quot;&gt;&lt;a href=&quot;#XA简单介绍&quot; class=&quot;headerlink&quot; title=&quot;XA简单介绍&quot;&gt;&lt;/a&gt;XA简单介绍&lt;/h3&gt;&lt;p&gt;XA是由X /
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Distributed Transaction" scheme="http://Yuck1125.github.io/tags/Distributed-Transaction/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>线程池中Callable异常处理分析</title>
+    <link href="http://Yuck1125.github.io/2019/07/10/catch-callable-exception/"/>
+    <id>http://Yuck1125.github.io/2019/07/10/catch-callable-exception/</id>
+    <published>2019-07-10T03:28:24.000Z</published>
+    <updated>2022-09-12T03:13:50.993Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="java" scheme="http://Yuck1125.github.io/tags/java/"/>
+    
+      <category term="ThreadPoolExecutor" scheme="http://Yuck1125.github.io/tags/ThreadPoolExecutor/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>LongAdder源码分析</title>
+    <link href="http://Yuck1125.github.io/2019/06/25/Adder-analysis/"/>
+    <id>http://Yuck1125.github.io/2019/06/25/Adder-analysis/</id>
+    <published>2019-06-25T06:51:15.000Z</published>
+    <updated>2022-09-12T03:13:50.991Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;Intro&quot;&gt;&lt;a href=&quot;#Intro&quot; class=&quot;headerlink&quot; title=&quot;Intro&quot;&gt;&lt;/a&gt;Intro&lt;/h3&gt;&lt;p&gt;&amp;emsp;&amp;emsp;JDK8
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="java" scheme="http://Yuck1125.github.io/tags/java/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>mysql区间查询的注意点</title>
+    <link href="http://Yuck1125.github.io/2019/06/17/Note-on-mysql-interval-query/"/>
+    <id>http://Yuck1125.github.io/2019/06/17/Note-on-mysql-interval-query/</id>
+    <published>2019-06-17T03:47:25.000Z</published>
+    <updated>2022-09-12T03:13:50.992Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;1-Description&quot;&gt;&lt;a href=&quot;#1-Description&quot; class=&quot;headerlink&quot; title=&quot;1. Description&quot;&gt;&lt;/a&gt;1. Description&lt;/h3&gt;&lt;p&gt;&amp;emsp;&amp;emsp;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="mysql" scheme="http://Yuck1125.github.io/tags/mysql/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>A java.lang.NoClassDefFoundError: ch/qos/logback/classic/spi/ThrowableProxy</title>
+    <link href="http://Yuck1125.github.io/2019/06/13/NoClassDefFoundError/"/>
+    <id>http://Yuck1125.github.io/2019/06/13/NoClassDefFoundError/</id>
+    <published>2019-06-13T04:19:17.000Z</published>
+    <updated>2022-09-12T03:13:50.992Z</updated>
+    
+    <summary type="html">
+    
+      
+      
+        
+        
+          &lt;h3 id=&quot;Describtion&quot;&gt;&lt;a href=&quot;#Describtion&quot; class=&quot;headerlink&quot;
+        
+      
+    
+    </summary>
+    
+      <category term="技术" scheme="http://Yuck1125.github.io/categories/%E6%8A%80%E6%9C%AF/"/>
+    
+    
+      <category term="Exception" scheme="http://Yuck1125.github.io/tags/Exception/"/>
+    
+  </entry>
+  
+</feed>

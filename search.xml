@@ -1,0 +1,474 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>泛型桥接方法验证</title>
+    <url>/2019/11/25/JAVA-bridge-method/</url>
+    <content><![CDATA[<h3 id="简单验证"><a href="#简单验证" class="headerlink" title="简单验证"></a>简单验证</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public interface SuperClass&lt;T&gt; &#123;</span><br><span class="line">    public T Apply(T t) ;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">public class SonClass implements SuperClass&lt;String&gt; &#123;</span><br><span class="line"></span><br><span class="line">    public String Apply(String str) &#123;</span><br><span class="line">        return str;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运行<code>javap -c -v SuperClass.class SonClass.class</code>查看编译后的结果 可以看到SonClass额外生成了一个<code>Object Apply (Object obj)</code>的桥接方法</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">&#123;</span><br><span class="line">  public abstract T Apply(T);</span><br><span class="line">    descriptor: (Ljava/lang/Object;)Ljava/lang/Object;</span><br><span class="line">    flags: ACC_PUBLIC, ACC_ABSTRACT</span><br><span class="line">    MethodParameters:</span><br><span class="line">      Name                           Flags</span><br><span class="line">      t</span><br><span class="line">    Signature: #8                           // (TT;)TT;</span><br><span class="line">&#125;</span><br><span class="line">Signature: #9                           // &lt;T:Ljava/lang/Object;&gt;Ljava/lang/Object;</span><br><span class="line">SourceFile: &quot;SuperClass.java&quot;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">&#123;</span><br><span class="line">  public com.example.bridge.demo.SonClass();</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=1, args_size=1</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: invokespecial #1                  // Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span><br><span class="line">         4: return</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 6: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       5     0  this   Lcom/example/bridge/demo/SonClass;</span><br><span class="line"></span><br><span class="line">  public java.lang.String Apply(java.lang.String);</span><br><span class="line">    descriptor: (Ljava/lang/String;)Ljava/lang/String;</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=1, locals=2, args_size=2</span><br><span class="line">         0: aload_1</span><br><span class="line">         1: areturn</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 9: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       2     0  this   Lcom/example/bridge/demo/SonClass;</span><br><span class="line">            0       2     1   str   Ljava/lang/String;</span><br><span class="line">    MethodParameters:</span><br><span class="line">      Name                           Flags</span><br><span class="line">      str</span><br><span class="line"></span><br><span class="line">  public java.lang.Object Apply(java.lang.Object);</span><br><span class="line">    descriptor: (Ljava/lang/Object;)Ljava/lang/Object;</span><br><span class="line">    flags: ACC_PUBLIC, ACC_BRIDGE, ACC_SYNTHETIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=2, locals=2, args_size=2</span><br><span class="line">         0: aload_0</span><br><span class="line">         1: aload_1</span><br><span class="line">         2: checkcast     #2                  // class java/lang/String</span><br><span class="line">         5: invokevirtual #3                  // Method Apply:(Ljava/lang/String;)Ljava/lang/String;</span><br><span class="line">         8: areturn</span><br><span class="line">      LineNumberTable:</span><br><span class="line">        line 6: 0</span><br><span class="line">      LocalVariableTable:</span><br><span class="line">        Start  Length  Slot  Name   Signature</span><br><span class="line">            0       9     0  this   Lcom/example/bridge/demo/SonClass;</span><br><span class="line">    MethodParameters:</span><br><span class="line">      Name                           Flags</span><br><span class="line">      str                            synthetic</span><br><span class="line">&#125;</span><br><span class="line">Signature: #21                          // Ljava/lang/Object;Lcom/example/bridge/demo/SuperClass&lt;Ljava/lang/String;&gt;;</span><br><span class="line">SourceFile: &quot;SonClass.java&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>我们都知道JAVA泛型并不是真正的泛型，在编译完成后泛型会被擦除，变成Object。如果没有桥接方法，编译完成后其实子类并没有实现父类方法。所以为了语义，编译器会自动生成桥接方法，来保证兼容性。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>JAVA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>LongAdder源码分析</title>
+    <url>/2019/06/25/Adder-analysis/</url>
+    <content><![CDATA[<h3 id="Intro"><a href="#Intro" class="headerlink" title="Intro"></a>Intro</h3><p>&emsp;&emsp;JDK8 在并发工具包下增加了<code>LongAdder、DoubleAdder</code>类，提供原子的增减功能。本文主要介绍一下<code>LongAdder</code>，根据<code>Doug Lea</code>的文档描述,该类在高并发的情况下，吞吐量会比<code>AtomicLong</code>高很多，当然会牺牲一定的空间。</p>
+<h3 id="AtomicLong"><a href="#AtomicLong" class="headerlink" title="AtomicLong"></a>AtomicLong</h3><p>&emsp;&emsp;JDK8以前JUC下面的原子类都是通过Unsafe类提供CAS的能力来实现的，而Unsafe类是由C来调用硬件级的原子指令实现的。AtmicLong的部分代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> // setup to use Unsafe.compareAndSwapLong for updates</span><br><span class="line">private static final Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line"></span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            valueOffset = unsafe.objectFieldOffset</span><br><span class="line">            (AtomicLong.class.getDeclaredField(&quot;value&quot;));</span><br><span class="line">        &#125; catch (Exception ex) &#123; throw new Error(ex); &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">public final long addAndGet(long delta) &#123;</span><br><span class="line">        return unsafe.getAndAddLong(this, valueOffset, delta) + delta;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Unsafe类部分代码：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public final long getAndAddLong(Object var1, long var2, long var4) &#123;</span><br><span class="line">       long var6;</span><br><span class="line">       do &#123;</span><br><span class="line">           var6 = this.getLongVolatile(var1, var2);</span><br><span class="line">       &#125; while(!this.compareAndSwapLong(var1, var2, var6, var6 + var4));</span><br><span class="line">       return var6;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>getLongVolatile</code>方法是从内存中取到对应的值，然后尝试CAS更新，成功就返回,失败就不断重试直到成功。在高并发的情况下，会造成很大的开销。</p>
+<h3 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h3><p>&emsp;&emsp;先看一下该类的结构;<br><img src="/img/Adder-1.png" alt><br>LongAdder继承自Striped64,其核心功能基本都是<code>Striped64</code>实现的。介绍一下<code>Striped64</code>的主要属性</p>
+<ul>
+<li>基础值<code>base</code></li>
+<li>内部类<code>Cell</code><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">@sun.misc.Contended static final class Cell &#123;</span><br><span class="line">    volatile long value;</span><br><span class="line">    Cell(long x) &#123; value = x; &#125;</span><br><span class="line">    final boolean cas(long cmp, long val) &#123;</span><br><span class="line">        return UNSAFE.compareAndSwapLong(this, valueOffset, cmp, val);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // Unsafe mechanics</span><br><span class="line">    private static final sun.misc.Unsafe UNSAFE;</span><br><span class="line">    private static final long valueOffset;</span><br><span class="line">    static &#123;</span><br><span class="line">        try &#123;</span><br><span class="line">            UNSAFE = sun.misc.Unsafe.getUnsafe();</span><br><span class="line">            Class&lt;?&gt; ak = Cell.class;</span><br><span class="line">            valueOffset = UNSAFE.objectFieldOffset</span><br><span class="line">                (ak.getDeclaredField(&quot;value&quot;));</span><br><span class="line">        &#125; catch (Exception e) &#123;</span><br><span class="line">            throw new Error(e);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><code>@sun.misc.Contended</code>注解，可以<a href="https://www.jianshu.com/p/c3c108c3dcfd" target="_blank" rel="noopener">解决伪共享的问题</a></p>
+<ul>
+<li>数组<code>Cells</code>,数组大小为2的N次方,首次初始化为2</li>
+<li><code>NCPU</code> 控制数组的最大为cpu的核数</li>
+</ul>
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><h5 id="add方法"><a href="#add方法" class="headerlink" title="add方法"></a>add方法</h5><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void add(long x) &#123;</span><br><span class="line">      Cell[] as; long b, v; int m; Cell a;</span><br><span class="line">      // 第一次add() 直接调用casBase()。</span><br><span class="line">      //成功就结束，否则走到下面逻辑</span><br><span class="line">      if ((as = cells) != null || !casBase(b = base, b + x)) &#123;</span><br><span class="line">           // 设置竞争标识。true-&gt;目前没有竞争</span><br><span class="line">          boolean uncontended = true;</span><br><span class="line">          // as数组为空或者size为0</span><br><span class="line">          // 或者当前线程所分配的Cell为空(as数组大小为2的N次方，所以这里其实就是取模的操作a%b==a&amp;(b-1))</span><br><span class="line">          // 或者cas更新Cell失败</span><br><span class="line">          //就执行longAccumulate()方法</span><br><span class="line">          if (as == null || (m = as.length - 1) &lt; 0 ||</span><br><span class="line">              (a = as[getProbe() &amp; m]) == null ||</span><br><span class="line">              !(uncontended = a.cas(v = a.value, v + x)))</span><br><span class="line">              longAccumulate(x, null, uncontended);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line"> </span><br><span class="line"> final boolean casBase(long cmp, long val) &#123;</span><br><span class="line">      return UNSAFE.compareAndSwapLong(this, BASE, cmp, val);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<h5 id="longAccumulate方法"><a href="#longAccumulate方法" class="headerlink" title="longAccumulate方法"></a>longAccumulate方法</h5><p>&emsp;&emsp;先看一下longAccumulate方法大概逻辑;<br><img src="/img/Adder-2.png" alt>  </p>
+<ul>
+<li>首先获取当前线程的<code>probe</code> 如果没有初始化就初始化并设置<code>wasUncontended==true</code></li>
+<li>循环中的逻辑有三个大分支 <ol>
+<li>cells数组内有元素</li>
+<li>尝试扩容</li>
+<li>尝试用casBase()计算值</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">    int h;</span><br><span class="line">    if ((h = getProbe()) == 0) &#123;</span><br><span class="line">        //初始化当前线程的prob</span><br><span class="line">        ThreadLocalRandom.current(); // force initialization</span><br><span class="line">        h = getProbe();</span><br><span class="line">        wasUncontended = true;</span><br><span class="line">    &#125;</span><br><span class="line">    boolean collide = false;                // True if last slot nonempty</span><br><span class="line">    for (;;) &#123;</span><br><span class="line">        Cell[] as; Cell a; int n; long v;</span><br><span class="line">        // cells数组内有元素</span><br><span class="line">        if ((as = cells) != null &amp;&amp; (n = as.length) &gt; 0) &#123;</span><br><span class="line">            // 当前线程分配到的桶位 值为null 就对其赋值</span><br><span class="line">            if ((a = as[(n - 1) &amp; h]) == null) &#123;</span><br><span class="line">                if (cellsBusy == 0) &#123;       // Try to attach new Cell</span><br><span class="line">                    Cell r = new Cell(x);   // Optimistically create</span><br><span class="line">                    // 这里casCellsBusy()防止了并发的安全问题</span><br><span class="line">                    if (cellsBusy == 0 &amp;&amp; casCellsBusy()) &#123;</span><br><span class="line">                        boolean created = false;</span><br><span class="line">                        try &#123;               // Recheck under lock</span><br><span class="line">                            Cell[] rs; int m, j;</span><br><span class="line">                            // 重新确认是否已赋值</span><br><span class="line">                            if ((rs = cells) != null &amp;&amp;</span><br><span class="line">                                (m = rs.length) &gt; 0 &amp;&amp;</span><br><span class="line">                                rs[j = (m - 1) &amp; h] == null) &#123;</span><br><span class="line">                                rs[j] = r;</span><br><span class="line">                                created = true;</span><br><span class="line">                            &#125;</span><br><span class="line">                        &#125; finally &#123;</span><br><span class="line">                            cellsBusy = 0;</span><br><span class="line">                        &#125;</span><br><span class="line">                        // false 说明现在又线程在进行初始操作，自旋检查created标识 </span><br><span class="line">                        if (created)</span><br><span class="line">                            break;</span><br><span class="line">                        continue;        </span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">                collide = false;</span><br><span class="line">            &#125;</span><br><span class="line">            else if (!wasUncontended)       // CAS already known to fail</span><br><span class="line">                wasUncontended = true;      // Continue after rehash</span><br><span class="line">                // Cell尝试cas操作</span><br><span class="line">            else if (a.cas(v = a.value, ((fn == null) ? v + x :</span><br><span class="line">                                         fn.applyAsLong(v, x))))</span><br><span class="line">                break;</span><br><span class="line">                // 扩容到最大容量 或者引用过期</span><br><span class="line">            else if (n &gt;= NCPU || cells != as)</span><br><span class="line">                collide = false;            // At max size or stale</span><br><span class="line">                // false-&gt; 重新自旋 ps.个人觉得是防止引用过期,然后再重试下 </span><br><span class="line">            else if (!collide)</span><br><span class="line">                collide = true;</span><br><span class="line">                // 扩容，扩大两倍</span><br><span class="line">            else if (cellsBusy == 0 &amp;&amp; casCellsBusy()) &#123;</span><br><span class="line">                try &#123;</span><br><span class="line">                    if (cells == as) &#123;      // Expand table unless stale</span><br><span class="line">                        Cell[] rs = new Cell[n &lt;&lt; 1];</span><br><span class="line">                        for (int i = 0; i &lt; n; ++i)</span><br><span class="line">                            rs[i] = as[i];</span><br><span class="line">                        cells = rs;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125; finally &#123;</span><br><span class="line">                    cellsBusy = 0;</span><br><span class="line">                &#125;</span><br><span class="line">                collide = false;</span><br><span class="line">                continue;                   // Retry with expanded table</span><br><span class="line">            &#125;</span><br><span class="line">            h = advanceProbe(h);</span><br><span class="line">        &#125;</span><br><span class="line">        // 尝试扩容</span><br><span class="line">        else if (cellsBusy == 0 &amp;&amp; cells == as &amp;&amp; casCellsBusy()) &#123;</span><br><span class="line">            boolean init = false;</span><br><span class="line">            try &#123;                           // Initialize table</span><br><span class="line">                if (cells == as) &#123;</span><br><span class="line">                    Cell[] rs = new Cell[2];</span><br><span class="line">                    // 根据奇偶分配</span><br><span class="line">                    rs[h &amp; 1] = new Cell(x);</span><br><span class="line">                    cells = rs;</span><br><span class="line">                    init = true;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; finally &#123;</span><br><span class="line">                cellsBusy = 0;</span><br><span class="line">            &#125;</span><br><span class="line">            if (init)</span><br><span class="line">                break;</span><br><span class="line">        &#125;</span><br><span class="line">        // 尝试累加值</span><br><span class="line">        else if (casBase(v = base, ((fn == null) ? v + x :</span><br><span class="line">                                    fn.applyAsLong(v, x))))</span><br><span class="line">            break;                          // Fall back on using base</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">   final boolean casCellsBusy() &#123;</span><br><span class="line">    return UNSAFE.compareAndSwapInt(this, CELLSBUSY, 0, 1);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>&emsp;&emsp;LongAdder的性能毋容置疑，主要的缺点就是它不能获取自增后的更新值。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>A java.lang.NoClassDefFoundError: ch/qos/logback/classic/spi/ThrowableProxy</title>
+    <url>/2019/06/13/NoClassDefFoundError/</url>
+    <content><![CDATA[<h3 id="Describtion"><a href="#Describtion" class="headerlink" title="Describtion"></a>Describtion</h3><p>&emsp;&emsp;今天打完jar包，上传服务器时，执行脚本时报错。</p>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><p>&emsp;&emsp;上传jar包前，把需要更新的服务先停了，不然可能就会抛出此错误。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>Exception</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>mysql区间查询的注意点</title>
+    <url>/2019/06/17/Note-on-mysql-interval-query/</url>
+    <content><![CDATA[<h3 id="1-Description"><a href="#1-Description" class="headerlink" title="1. Description"></a>1. Description</h3><p>&emsp;&emsp; 最近在使用mysql区间查询的时候遇到的一个问题。在此简单记录以下</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * from table where  1 &lt; id  &lt;100 ;</span><br></pre></td></tr></table></figure>
+
+<p>这样查询会返回table表中所有的数据或者空数据，实际上的sql其实是</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * from table where  1; </span><br><span class="line">SELECT * from table where  0;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-Solution"><a href="#2-Solution" class="headerlink" title="2. Solution"></a>2. Solution</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">SELECT * from table where  1 &lt; id and id &lt;100 ;</span><br><span class="line">SELECT * from table where   id  between 1 and 100 ;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>InnoDB 内存和磁盘结构介绍</title>
+    <url>/2019/07/20/InnoDB-In-memory-and-on-disk-structures/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>&emsp;&emsp;本来只是想了解下redo、undo log的机制，但发现好像牵扯挺多知识点，就写了这篇文章记录下。。。</p>
+<h3 id="InnoDB-架构"><a href="#InnoDB-架构" class="headerlink" title="InnoDB 架构"></a>InnoDB 架构</h3><p><strong>本文分析的mysql版本为8.0</strong><br><img src="/img/innodb-architecture.png" alt></p>
+<h3 id="一-InnoDB-内存结构"><a href="#一-InnoDB-内存结构" class="headerlink" title="一  InnoDB 内存结构"></a>一  InnoDB 内存结构</h3><h4 id="1-1-Buffer-pool"><a href="#1-1-Buffer-pool" class="headerlink" title="1.1 Buffer pool"></a>1.1 Buffer pool</h4><p>&emsp;&emsp;<strong>Buffer   pool(下文简称BP)</strong> 是在主内存中的一块区域，用于在访问时缓存表和索引数据。它可以直接从内存处理数据,因此处理速度非常快。<br>&emsp;&emsp;为了提高大容量读取操作的效率，BP被分成可以容纳多行的<strong>Page</strong>（默认16K）。BP的底层数据结构是链表，以此管理Page。<br><img src="/img/innodb-buffer-pool-list.png" alt> </p>
+<h5 id="1-1-1-Buffer-Pool-LRU"><a href="#1-1-1-Buffer-Pool-LRU" class="headerlink" title="1.1.1 Buffer Pool LRU"></a>1.1.1 Buffer Pool LRU</h5><p>&emsp;&emsp;BP的LRU是一种变体。BP插入数据时，采用了<strong>中间策略（midpoint insertion strategy）</strong>。中间策略将BP视为两个子列表：</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">new sublist : 存放最近访问的子列表</span><br><span class="line">old sublist : 存放最近访问较少的子列表</span><br></pre></td></tr></table></figure>
+
+<p>LRU算法主要的操作如下：</p>
+<ul>
+<li>默认将3/8的BP空间分配给old sublist</li>
+<li>规定<strong>midpoint</strong>为 <code>new sublist</code>的tail 与 <code>old sublist</code>的head交界处</li>
+<li>InnoDB读取Page到BP时，插入到<strong>midpoint（old sublist的头部）</strong>。Page被读取有两种情况:<ul>
+<li>用户的sql查询</li>
+<li>InnoDB的预读操作</li>
+</ul>
+</li>
+<li>当访问old sublist的Page时，会将其移到new sublist的head,实际上几乎所有的read Page操作都会将其移动到new sublist的head。除了预读的Page的情况,预读后如果一直没其他的读操作，该Page最终会从tail剔除</li>
+<li>随着数据库的运行,一直没有被访问的page会被移向tail，最终被剔除</li>
+</ul>
+<h5 id="1-1-2-Making-the-Buffer-Pool-Scan-Resistant"><a href="#1-1-2-Making-the-Buffer-Pool-Scan-Resistant" class="headerlink" title="1.1.2 Making the Buffer Pool Scan Resistant"></a>1.1.2 Making the Buffer Pool Scan Resistant</h5><p>默认情况下，会出现以下两种case</p>
+<ul>
+<li>因表扫描，大量数据读入BP，但这数据之后不再被使用 </li>
+<li>由预读加载然后仅访问一次的Page移动到新列表的头部<br>这两种情况可以将经常使用的page移向到旧子列表中，最终导致被剔除。<br>因此InnoDB做了<code>Making the Buffer Pool Scan Resistant</code>这个优化。简单的说就是读取Page插入到BP的时候不是插入到<strong>midpoint</strong>而是先插入到<strong>old sublist的tail</strong>   ，第一次被读取的时候，再移到<strong>midpoint</strong>。<br>另外的一些参数优化可参考官方文档：<blockquote>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-performance-midpoint_insertion.html" target="_blank" rel="noopener">Making the Buffer Pool Scan Resistant</a><br><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-performance-read_ahead.html" target="_blank" rel="noopener">Configuring InnoDB Buffer Pool Prefetching (Read-Ahead)</a>  </p>
+</blockquote>
+</li>
+</ul>
+<h4 id="1-2-Change-Buffer"><a href="#1-2-Change-Buffer" class="headerlink" title="1.2 Change Buffer"></a>1.2 Change Buffer</h4><p>&emsp;&emsp;<strong>Change Buffer(以下简称CB)</strong> 存在于内存，当对辅助索引（secondary index） 进行DML操作时，BP没有其相应的Page，会将这些变更缓存到CP中。当CB里的Page被read的时候，会被合并到BP中。<strong>当脏页超过一定比例时，会将其flush磁盘中</strong>。CB的内存默认占BP的25%。<br>个人认为刷新页到磁盘时没有将CB的数据刷到磁盘，因为CB中的数据只有在被读到的时候才会和BP合并，因此数据库对应的旧数据也不会被读，所以也不急着和flush到磁盘。。<br><img src="/img/innodb-change-buffer.png" alt>  </p>
+<h5 id="1-2-1-CB带来的提升"><a href="#1-2-1-CB带来的提升" class="headerlink" title="1.2.1 CB带来的提升"></a>1.2.1 CB带来的提升</h5><p>&emsp;&emsp;原本修改BP不存在的Page需要先从磁盘读取（一次IO操作）到内存，然后写redo log。<br>&emsp;&emsp;引入CB后，会先缓存在CB，然后写redo log。<br><strong>由于CB的存在，避免了从磁盘读取辅助索引到缓冲池所需的大量随机访问I / O。</strong><br>辅助索引不支持Change Buffer的情况：</p>
+<ul>
+<li>如辅助索引包含降序索引列</li>
+<li>主键包含降序索引  </li>
+<li><em>PS. 降序索引在8.0以上版本才支持。*</em></li>
+</ul>
+<h4 id="1-3-Adaptive-Hash-Index"><a href="#1-3-Adaptive-Hash-Index" class="headerlink" title="1.3. Adaptive Hash Index"></a>1.3. Adaptive Hash Index</h4><p>&emsp;&emsp;<strong>Adaptive Hash Index</strong>对InnoDB在BP的查询有很大的优化。针对BP中<strong>热点页数据</strong>，构建索引（一般使用索引键的前缀构建哈希索引）。因为HASH索引的等值查询效率远高于B+ tree，所以当查询命中hash，就能很快返回结果，不用再去遍历B+ tree。</p>
+<h4 id="1-4-Log-Buffer"><a href="#1-4-Log-Buffer" class="headerlink" title="1.4. Log Buffer"></a>1.4. Log Buffer</h4><p>&emsp;&emsp;<strong>Log Buffer</strong>是保存要<strong>写入磁盘上</strong>日志文件的数据的内存区域。默认大小16MB。相关参数设置如下</p>
+<ul>
+<li>innodb_log_buffer_size : 设置大小</li>
+<li>innodb_flush_log_at_trx_commit : 刷新行为。默认值：1， 取值有0，1，2三种。<ul>
+<li>0： 日志每秒刷新到磁盘。 未刷新日志的事务会在mysql崩溃中丢失</li>
+<li>1： 每次提交事务时，写入并刷新日志到磁盘</li>
+<li>2： 每次提交事务后写入日志，并每秒刷新一次磁盘。 未刷新日志的事务可能会在mysql崩溃中丢失。</li>
+</ul>
+</li>
+<li>innodb_flush_log_at_timeout：每几秒刷新日志，取值范围 [1,2700] (second)</li>
+</ul>
+<h3 id="二-InnoDB-磁盘结构"><a href="#二-InnoDB-磁盘结构" class="headerlink" title="二 InnoDB 磁盘结构"></a>二 InnoDB 磁盘结构</h3><h4 id="2-1-Tablespaces"><a href="#2-1-Tablespaces" class="headerlink" title="2.1 Tablespaces"></a>2.1 Tablespaces</h4><h5 id="2-1-1-The-System-Tablespace"><a href="#2-1-1-The-System-Tablespace" class="headerlink" title="2.1.1 The System Tablespace"></a>2.1.1 The System Tablespace</h5><p><strong>The System Tablespace</strong> 是Doublewrite Buffer和Change buffer的储存区域，也有用户创建的表和索引数据。该空间的数据文件通过参数<code>innodb_data_file_path</code>控制，默认值是<code>ibdata1:12M:autoextend</code>(文件名为ibdata1，大小略大于12MB，自动扩展)。<br><strong>8.0之后InnoDB将元数据（以前的.frm文件，存表结构）存在该区域的数据字典中（data dictionary）</strong>。</p>
+<h5 id="2-1-2-File-Per-Table-Tablespaces"><a href="#2-1-2-File-Per-Table-Tablespaces" class="headerlink" title="2.1.2 File-Per-Table Tablespaces"></a>2.1.2 File-Per-Table Tablespaces</h5><p><strong>File-Per-Table Tablespaces</strong> 默认开启,为每个表都独立建一个.ibd文件。 通过参数<code>innodb_file_per_tabl</code>  可以设置关闭，这样的话所有表数据是都存在The System Tablespace的ibdata。</p>
+<h5 id="2-1-3-General-Tablespaces"><a href="#2-1-3-General-Tablespaces" class="headerlink" title="2.1.3 General Tablespaces"></a>2.1.3 General Tablespaces</h5><p><strong>General Tablespaces</strong> 是通过<code>CREATE TABLESPACE</code>创建的共享表空间。</p>
+<h5 id="2-1-4-Undo-Tablespaces"><a href="#2-1-4-Undo-Tablespaces" class="headerlink" title="2.1.4 Undo Tablespaces"></a>2.1.4 Undo Tablespaces</h5><p><strong>Undo Tablespaces</strong>保存的是undo log ，用于回滚事务。<br>该表空间有rollback segments,<strong>rollback segments</strong>是用于存 <strong>undo log segments</strong>, 而<strong>undo log segments</strong>存的就是undo logs。<br>mysql启动的时候，默认初始两个undo tablespace(undo_001,undo_002)。因为sql执行前必须要有rollback segments。而两个undo tablespace才支持<strong>automated truncation of undo</strong>。</p>
+<blockquote>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-undo-tablespaces.html#truncate-undo-tablespace" target="_blank" rel="noopener">truncating  undo tablespaces</a></p>
+</blockquote>
+<h5 id="2-1-5-Temporary-Tablespaces"><a href="#2-1-5-Temporary-Tablespaces" class="headerlink" title="2.1.5  Temporary Tablespaces"></a>2.1.5  Temporary Tablespaces</h5><p>InnoDB把 <strong>Temporary Tablespaces</strong>分为两种，<strong>session temporary tablespaces</strong> 和<strong>global temporary tablespace</strong>。<br><strong>session temporary tablespaces</strong>存储的是用户创建的临时表和内部的临时表，一个session最多有两个表空间（用户临时表和内部临时表）。<br><strong>global temporary tablespace</strong>储存用户临时表的回滚段（rollback segments ）。<br>临时表的位置在<code>BASEDIR/data/#innodb_temp</code>下，文件名为temp_*.ibt。</p>
+<h4 id="2-2-Doublewrite-Buffer"><a href="#2-2-Doublewrite-Buffer" class="headerlink" title="2.2 Doublewrite Buffer"></a>2.2 Doublewrite Buffer</h4><p><strong>Doublewrite Buffer</strong>位于The System Tablespace。在BP的页数据刷到磁盘真正的位置前，会先将数据存在doublewrite buffer。 这步操作是直接将数据作为顺序块，调用OS的fsync()方法写入到doublewrite buffer。<br>虽然数据写了两次，但是性能还是比两次IO低的。<br>此外fsync保证了BP中的数据写到磁盘中，即使数据库挂了，还可以从doublewrite buffer中还原数据。<br>还可以解决页断裂的问题</p>
+<blockquote>
+<p><a href="https://www.cnblogs.com/cchust/p/3961260.html" target="_blank" rel="noopener">https://www.cnblogs.com/cchust/p/3961260.html</a></p>
+</blockquote>
+<h4 id="2-3-Redo-log"><a href="#2-3-Redo-log" class="headerlink" title="2.3 Redo log"></a>2.3 Redo log</h4><p>redo log记录的DML操作的日志，可以用来宕机后的数据前滚。（在log buffer的redo logo日志会在宕机中丢失）</p>
+<p> 默认的文件名为ib_logfile0 和ib_logfile1。</p>
+<h4 id="2-4-undo-log"><a href="#2-4-undo-log" class="headerlink" title="2.4 undo log"></a>2.4 undo log</h4><p><strong>undo log</strong>记录数据更改前的快照（感觉就是备份），在数据需要回滚就可以根据undo log恢复。<br>那些undo log 记录关于在global temporary tablespace 的用户临时表的回滚信息，不会在回滚中恢复。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>个人记录，并不一定都是对的，还是得好好看看官方文档,不断琢磨。。。</p>
+<blockquote>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-in-memory-structures.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/innodb-in-memory-structures.html</a><br><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-on-disk-structures.html" target="_blank" rel="noopener">https://dev.mysql.com/doc/refman/8.0/en/innodb-on-disk-structures.html</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>InnoDB</tag>
+        <tag>Mysql</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>git 打标签的注意点</title>
+    <url>/2019/08/20/git-tag-notice/</url>
+    <content><![CDATA[<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>   tag的名字不要和分支一样… 我遇到的情况就是 不能正常merge,提示<code>refname &#39;xxx&#39; is ambiguous.</code>和<code>branch is up to date with xxx</code>， </p>
+<h3 id="如何排查"><a href="#如何排查" class="headerlink" title="如何排查"></a>如何排查</h3><p>   <code>git show-ref</code> 查看命名情况,找到模糊定义的命名 删除或者修改即可 </p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>git</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>分布式事务（XA、2PC、3PC介绍）</title>
+    <url>/2019/07/15/XA-2PC-3PC/</url>
+    <content><![CDATA[<h3 id="XA简单介绍"><a href="#XA简单介绍" class="headerlink" title="XA简单介绍"></a>XA简单介绍</h3><p>XA是由X / Open发布的规范，用于DTP（分布式事务处理）。<br>DTP分布式模型主要含有</p>
+<ul>
+<li>AP： 应用程序</li>
+<li>TM: 事务管理器</li>
+<li>RM: 资源管理器(如数据库)</li>
+<li>CRM: 通讯资源管理器（如消息队列）</li>
+</ul>
+<p>XA主要就是TM和RM之间的通讯桥梁。</p>
+<h3 id="2PC"><a href="#2PC" class="headerlink" title="2PC"></a>2PC</h3><p>两阶段提交协议（The two-phase commit protocol，2PC）是 XA 用于在全局事务中协调多个资源的机制。<br>2PC将事务的提交过程分为两个阶段来进行处理</p>
+<ul>
+<li><strong>准备阶段</strong><ol>
+<li>TM向所有RM发送事务内容，询问是否可以提交事务，并等待所有RM答复。</li>
+<li>RMs执行事务操作，将操作信息记入事务日志中,但不提交事务</li>
+<li>如RM执行成功，给TM反馈YES；如执行失败，给TM反馈NO。</li>
+</ol>
+</li>
+<li><strong>提交阶段</strong><ol>
+<li>所有RM均反馈YES时，即提交事务</li>
+<li>任何一个RM反馈NO时，即中断事务并进行回滚。<h3 id="3PC"><a href="#3PC" class="headerlink" title="3PC"></a>3PC</h3>3PC是2PC的改进版，其将二阶段提交协议的“准备阶段”一份为二，形成了cancommit，precommit，docommit三个阶段。</li>
+</ol>
+</li>
+<li><strong>CanCommit阶段</strong><ol>
+<li>TM向RMs发送CanCommit请求。询问是否可以执行事务提交操作。然后开始等待RM的响应。</li>
+<li>RMs接到CanCommit请求之后，正常情况下，如果可以顺利执行事务，则返回Yes,并进入预备状态。否则反馈No</li>
+</ol>
+</li>
+<li><strong>PreCommit阶段</strong><ul>
+<li>正常情况：所有RM均反馈YES时，即提交事务<ol>
+<li>TM向RM发送PreCommit请求，并进入Prepared阶段。</li>
+<li>RM接收到PreCommit请求后，会执行事务操作，并将undo和redo信息记录到事务日志中。</li>
+<li>如果RM成功的执行了事务操作，则返回ACK响应，同时开始等待最终指令。</li>
+</ol>
+</li>
+<li>有任何一个RM向TM发送了No响应，或者等待超时之后，TM都没有接到RM的响应，那么就执行事务的中断。<ol>
+<li>TM向所有RM发送abort请求。</li>
+<li>RM收到来自TM的abort请求之后（或超时之后，仍未收到TM的请求），执行事务的中断。</li>
+</ol>
+</li>
+</ul>
+</li>
+<li><strong>doCommit阶段</strong><ul>
+<li>正常<ol>
+<li>TM接收到RM发送的ACK响应，那么他将从预提交状态进入到提交状态。并向所有RM发送doCommit请求。</li>
+<li>RM接收到doCommit请求之后，执行正式的事务提交。<strong>并在完成事务提交之后释放所有事务资源</strong>。</li>
+<li>事务提交完之后，向TM发送Ack响应。</li>
+<li>TM接收到所有RM的ack响应之后，完成事务。</li>
+</ol>
+</li>
+<li>TM没有接收到RM发送的ACK响应（可能是TM发送的不是ACK响应，也可能响应超时），那么就会执行中断事务。<ol>
+<li>TM向所有RM发送abort请求。</li>
+<li>RM接收到abort请求之后，利用其在阶段二记录的undo信息来执行事务的回滚操作，<strong>并在完成回滚之后释放所有的事务资源</strong>。</li>
+<li>RM完成事务回滚之后，向TM发送ACK消息。</li>
+<li>TM接收到RM反馈的ACK消息之后，执行事务的中断。</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>2PC的主要问题有三点：</p>
+<ul>
+<li>两个阶段事务处于阻塞状态</li>
+<li>TM出现问题，一直修复不了的话，RM会一直阻塞</li>
+<li>由于网络问题或者TM发送一半挂了 ，只有部分RM收到commmit请求，会导致数据的不一致</li>
+</ul>
+<p>3PC在二、三阶段引入<strong>超时自动提交事务的机制</strong>和<strong>RM完成事务后释放资源</strong>，有效的防止2PC的前两种情况。<br>3PC数据一致性的问题还是存在，doCommit时，TM发送abort请求，但由于网络问题，部分RM没有接受到。这样就会出现部分RM执行commit,另外一部分执行abort,从而导致数据不一致的问题。</p>
+<h3 id="refer"><a href="#refer" class="headerlink" title="refer"></a>refer</h3><p><a href="https://www.infoq.cn/article/xa-transactions-handle/" target="_blank" rel="noopener">https://www.infoq.cn/article/xa-transactions-handle/</a><br><a href="https://blog.csdn.net/u013679744/article/details/79188945" target="_blank" rel="noopener">https://blog.csdn.net/u013679744/article/details/79188945</a></p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>Distributed Transaction</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>InnoDB锁类型</title>
+    <url>/2019/08/22/innodb-lock-type/</url>
+    <content><![CDATA[<h4 id="1-Shared-and-Exclusive-Locks"><a href="#1-Shared-and-Exclusive-Locks" class="headerlink" title="1. Shared and Exclusive Locks"></a>1. Shared and Exclusive Locks</h4><ol>
+<li>Shared Lock(简称S Lock，共享锁): 允许持有锁的事务读取行的操作</li>
+<li>Exclusive Lock(简称 X Lock，排他锁): 允许持有锁的事务进行更新和删除行的操作</li>
+</ol>
+<p>事务T1如果持有记录a的<strong>S Lock</strong>,此时事务t2也对记录a进行操作时，有两种情况：</p>
+<ul>
+<li>t2请求的是S Lock： t1,t2同时持有记录a的S Lock</li>
+<li>t2请求的是X Lock: t2会等待t1释放锁后，才能获取X Lock</li>
+</ul>
+<p>事务t1如果持有是记录a的<strong>X Lock</strong>，那么t2不管请求S 还是X Lock,都要等t1释放锁后才能去请求。</p>
+<h4 id="2-Intention-Locks"><a href="#2-Intention-Locks" class="headerlink" title="2. Intention Locks"></a>2. Intention Locks</h4><p><strong>Intention Locks</strong>是表级锁，它表示之后的事务需要获取哪种类型的行锁(S、X)。</p>
+<ul>
+<li><strong>Intention Shared Lock(IS Lock):</strong> 表示事务意图在表中各个行上加一个共享锁</li>
+<li><strong>Intention Exclusive Lock (IX Lock):</strong> 表示事务意图在表中各个行上加一个排他锁</li>
+</ul>
+<p>我们可以通过<code>SELECT ... FOR SHARE</code> 和 <code>SELECT ... FOR UPDATE</code> 来获取IS、IX Lock。</p>
+<p>意图锁有以下限制：</p>
+<ul>
+<li>在事务可以获取表中某行的共享锁之前，它必须首先获取表上的<strong>IS锁或更强的锁(IX、S、X)</strong>。</li>
+<li>在事务可以获取表中某行的独占锁之前，它必须首先获取表上的<strong>IX锁</strong>。</li>
+</ul>
+<p><strong>表级锁</strong>的兼容性如下表：</p>
+<table>
+<thead>
+<tr>
+<th>\</th>
+<th>X</th>
+<th>IX</th>
+<th>S</th>
+<th>IS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>X</td>
+<td>Conflict</td>
+<td>Conflict</td>
+<td>Conflict</td>
+<td>Conflict</td>
+</tr>
+<tr>
+<td>IX</td>
+<td>Conflict</td>
+<td><strong>Compatible</strong></td>
+<td>Conflict</td>
+<td><strong>Compatible</strong></td>
+</tr>
+<tr>
+<td>S</td>
+<td>Conflict</td>
+<td>Conflict</td>
+<td><strong>Compatible</strong></td>
+<td><strong>Compatible</strong></td>
+</tr>
+<tr>
+<td>IS</td>
+<td>Conflict</td>
+<td><strong>Compatible</strong></td>
+<td><strong>Compatible</strong></td>
+<td><strong>Compatible</strong></td>
+</tr>
+</tbody></table>
+<p>如果事务请求的锁和先有锁兼容，则获取到锁。否则，事务会等待，直到现有的锁被释放。</p>
+<h5 id="2-1-SELECT-…-FOR-UPDATE"><a href="#2-1-SELECT-…-FOR-UPDATE" class="headerlink" title="2.1 SELECT … FOR UPDATE"></a>2.1 SELECT … FOR UPDATE</h5><p><strong>T1</strong>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test  for update;</span><br><span class="line">+----+------+-------+</span><br><span class="line">| id | name | name2 |</span><br><span class="line">+----+------+-------+</span><br><span class="line">|  1 | aa   | aa    |</span><br><span class="line">|  2 | aA   | aA    |</span><br><span class="line">+----+------+-------+</span><br><span class="line">2 rows in set (0.03 sec)</span><br><span class="line"></span><br><span class="line"> mysql&gt;show engine innodb status;</span><br><span class="line"></span><br><span class="line">------------</span><br><span class="line">TRANSACTIONS</span><br><span class="line">------------</span><br><span class="line">Trx id counter 13049</span><br><span class="line">Purge done for trx&apos;s n:o &lt; 12996 undo n:o &lt; 0 state: running but idle</span><br><span class="line">History list length 113</span><br><span class="line">LIST OF TRANSACTIONS FOR EACH SESSION:</span><br><span class="line">...</span><br><span class="line">---TRANSACTION 13048, ACTIVE 122 sec</span><br><span class="line">2 lock struct(s), heap size 1136, 3 row lock(s)</span><br><span class="line">MySQL thread id 19, OS thread handle 12056, query id 367 localhost ::1 root</span><br></pre></td></tr></table></figure>
+
+<p><strong>表里就两条记录，但有三把行锁 ？</strong><br>此时事务T2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test for update;</span><br><span class="line">Lock wait timeout exceeded; try restarting transaction</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">------------</span><br><span class="line">TRANSACTIONS</span><br><span class="line">------------</span><br><span class="line">Trx id counter 13050</span><br><span class="line">Purge done for trx&apos;s n:o &lt; 12996 undo n:o &lt; 0 state: running but idle</span><br><span class="line">History list length 113</span><br><span class="line">LIST OF TRANSACTIONS FOR EACH SESSION:</span><br><span class="line">...</span><br><span class="line">---TRANSACTION 13049, ACTIVE 11 sec starting index read</span><br><span class="line">mysql tables in use 1, locked 1</span><br><span class="line">LOCK WAIT 2 lock struct(s), heap size 1136, 1 row lock(s)</span><br><span class="line">MySQL thread id 20, OS thread handle 2708, query id 370 localhost ::1 root Sending data</span><br><span class="line">select * from test for update</span><br><span class="line">------- TRX HAS BEEN WAITING 11 SEC FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 153 page no 4 n bits 72 index PRIMARY of table `localtest`.`test` trx id 13049 lock_mode X waiting</span><br><span class="line">Record lock, heap no 4 PHYSICAL RECORD: n_fields 5; compact format; info bits 128</span><br><span class="line"> 0: len 4; hex 80000001; asc     ;;</span><br><span class="line"> 1: len 6; hex 000000002e5a; asc     .Z;;</span><br><span class="line"> 2: len 7; hex 010000011a096e; asc       n;;</span><br><span class="line"> 3: len 2; hex 6161; asc aa;;</span><br><span class="line"> 4: len 2; hex 6161; asc aa;;</span><br><span class="line"></span><br><span class="line">------------------</span><br><span class="line">---TRANSACTION 13048, ACTIVE 458 sec</span><br><span class="line">2 lock struct(s), heap size 1136, 3 row lock(s)</span><br><span class="line">MySQL thread id 19, OS thread handle 12056, query id 367 localhost ::1 root</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-Record-Locks"><a href="#3-Record-Locks" class="headerlink" title="3. Record Locks"></a>3. Record Locks</h3><p><strong>Record Lock</strong>锁的是索引。如果表没有，InnoDB会建一个隐藏的聚簇索引，并用该隐藏索引来锁定记录。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test  where id=3 for update;</span><br><span class="line">+----+------+-------+</span><br><span class="line">| id | name | name2 |</span><br><span class="line">+----+------+-------+</span><br><span class="line">|  1 | aa   | aa    |</span><br><span class="line">+----+------+-------+</span><br><span class="line">1 row in set (0.03 sec)</span><br><span class="line"></span><br><span class="line">------------</span><br><span class="line">TRANSACTIONS</span><br><span class="line">------------</span><br><span class="line">mysql tables in use 1, locked 1</span><br><span class="line">LOCK WAIT 3 lock struct(s), heap size 1136, 6 row lock(s), undo log entries 1</span><br><span class="line">MySQL thread id 13, OS thread handle 14940, query id 586 localhost ::1 root updating</span><br><span class="line">update test set name=&apos;test&apos; where id =3</span><br><span class="line">------- TRX HAS BEEN WAITING 2 SEC FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 312 page no 4 n bits 96 index PRIMARY of table `localtest`.`test` trx id 18709</span><br><span class="line">lock_mode X locks rec but not gap waiting</span><br><span class="line">Record lock, heap no 19 PHYSICAL RECORD: n_fields 7; compact format; info bits 128</span><br><span class="line"></span><br><span class="line">------------</span><br><span class="line">TRANSACTIONS</span><br><span class="line">------------</span><br><span class="line">mysql tables in use 1, locked 1</span><br><span class="line">LOCK WAIT 3 lock struct(s), heap size 1136, 7 row lock(s), undo log entries 1</span><br><span class="line">MySQL thread id 13, OS thread handle 14940, query id 589 localhost ::1 root updating</span><br><span class="line">delete from test where id =3</span><br><span class="line">Trx read view will not see trx with id &gt;= 18711, sees &lt; 18710</span><br><span class="line">------- TRX HAS BEEN WAITING 2 SEC FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 312 page no 4 n bits 96 index PRIMARY of table `localtest`.`test` trx id 18709</span><br><span class="line">lock_mode X locks rec but not gap waiting</span><br><span class="line">Record lock, heap no 19 PHYSICAL RECORD: n_fields 7; compact format; info bits 128</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-Gap-Locks"><a href="#4-Gap-Locks" class="headerlink" title="4. Gap Locks"></a>4. Gap Locks</h3><p>T1开启一个事务 并执行下面语句</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test;</span><br><span class="line">+----+-----+</span><br><span class="line">| id | num |</span><br><span class="line">+----+-----+</span><br><span class="line">|  1 |   1 |</span><br><span class="line">|  3 |   3 |</span><br><span class="line">|  5 |   5 |</span><br><span class="line">|  9 |   9 |</span><br><span class="line">| 10 |  10 |</span><br><span class="line">| 15 |  15 |</span><br><span class="line">| 20 |  20 |</span><br><span class="line">+----+-----+</span><br><span class="line">7 rows in set (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test where id between 5 and 10 for update;</span><br><span class="line">+----+-----+</span><br><span class="line">| id | num |</span><br><span class="line">+----+-----+</span><br><span class="line">|  5 |   5 |</span><br><span class="line">|  9 |   9 |</span><br><span class="line">| 10 |  10 |</span><br><span class="line">+----+-----+</span><br><span class="line">3 rows in set (0.03 sec)</span><br></pre></td></tr></table></figure>
+
+<p>T2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test (id,num) values (100,100);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test (id,num) values (4,4);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test (id,num) values (6,6);</span><br><span class="line">1205 - Lock wait timeout exceeded; try restarting transaction</span><br><span class="line"></span><br><span class="line">····</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">MySQL thread id 20, OS thread handle 13996, query id 856 localhost ::1 root update</span><br><span class="line">insert into test (id,num) values (6,6)</span><br><span class="line">------- TRX HAS BEEN WAITING 42 SEC FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 313 page no 4 n bits 96 index PRIMARY</span><br><span class="line">of table `localtest`.`test` trx id 20874 lock_mode X locks gap before rec</span><br><span class="line">insert intention waiting</span><br></pre></td></tr></table></figure>
+
+<p>当<code>where xxx=?</code> 条件的<code>xxx</code>不是索引或者非唯一索引，会锁住前一个间隙</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test;</span><br><span class="line">+----+-----+</span><br><span class="line">| id | num |</span><br><span class="line">+----+-----+</span><br><span class="line">|  1 |   1 |</span><br><span class="line">|  3 |   3 |</span><br><span class="line">|  5 |   5 |</span><br><span class="line">|  9 |   9 |</span><br><span class="line">| 10 |  10 |</span><br><span class="line">| 11 |  11 |</span><br><span class="line">| 12 |  12 |</span><br><span class="line">| 15 |  15 |</span><br><span class="line">| 20 |  20 |</span><br><span class="line">+----+-----+</span><br><span class="line">9 rows in set (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test where num=15 for update;</span><br><span class="line">+----+-----+</span><br><span class="line">| id | num |</span><br><span class="line">+----+-----+</span><br><span class="line">| 15 |  15 |</span><br><span class="line">+----+-----+</span><br><span class="line">1 row in set (0.03 sec)</span><br></pre></td></tr></table></figure>
+
+<p>T2开启一个事务，并执行下面<code>insert</code>语句，</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test (id,num) values (17,17);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test (id,num) values (16,16);</span><br><span class="line">Query OK, 1 row affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test (id,num) values (14,14);</span><br><span class="line">1205 - Lock wait timeout exceeded; try restarting transaction</span><br><span class="line">mysql&gt; insert into test (id,num) values (22,15);</span><br><span class="line">1205 - Lock wait timeout exceeded; try restarting transaction</span><br><span class="line">mysql&gt; insert into test (id,num) values (23,12);</span><br><span class="line">1205 - Lock wait timeout exceeded; try restarting transaction</span><br><span class="line">····</span><br><span class="line"></span><br><span class="line">MySQL thread id 20, OS thread handle 13996, query id 765 localhost ::1 root update</span><br><span class="line">insert into test (id,num) values (14,14)</span><br><span class="line">------- TRX HAS BEEN WAITING 41 SEC FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 313 page no 6 n bits 88 index num of table `localtest`.`test` trx id 20832</span><br><span class="line">lock_mode X locks gap before rec insert intention waiting</span><br><span class="line">Record lock, heap no 12 PHYSICAL RECORD: n_fields 2;</span><br><span class="line">compact format; info bits 0</span><br><span class="line"> 0: len 4; hex 8000000f; asc     ;;</span><br><span class="line"> 1: len 4; hex 8000000f; asc     ;;</span><br></pre></td></tr></table></figure>
+
+<p>上面的情况锁住的区间是[12,15]</p>
+<p><strong>检索条件必须有索引,没有索引的话，会锁定整张表所有的记录</strong><br>T1</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test;</span><br><span class="line">+----+-----+</span><br><span class="line">| id | num |</span><br><span class="line">+----+-----+</span><br><span class="line">|  1 |   1 |</span><br><span class="line">|  3 |   3 |</span><br><span class="line">|  5 |   5 |</span><br><span class="line">|  9 |   9 |</span><br><span class="line">| 10 |  10 |</span><br><span class="line">| 15 |  15 |</span><br><span class="line">| 20 |  20 |</span><br><span class="line">+----+-----+</span><br><span class="line">7 rows in set (0.03 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; select * from test where num=15 for update;</span><br><span class="line">+----+-----+</span><br><span class="line">| id | num |</span><br><span class="line">+----+-----+</span><br><span class="line">| 15 |  15 |</span><br><span class="line">+----+-----+</span><br><span class="line">1 row in set (0.04 sec)</span><br></pre></td></tr></table></figure>
+
+<p>T2</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">mysql&gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; insert into test (id,num) values (4,4);</span><br><span class="line">1205 - Lock wait timeout exceeded; try restarting transaction</span><br><span class="line">mysql&gt; insert into test (id,num) values (100,100);</span><br><span class="line">1205 - Lock wait timeout exceeded; try restarting transaction</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MySQL thread id 20, OS thread handle 13996, query id 834 localhost ::1 root update</span><br><span class="line">insert into test (id,num) values (4,4)</span><br><span class="line">------- TRX HAS BEEN WAITING 24 SEC FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 313 page no 4 n bits 96 index PRIMARY of table `localtest`.`test` trx id 20872</span><br><span class="line">lock_mode X locks gap before rec insert intention waiting</span><br><span class="line">Record lock, heap no 5 PHYSICAL RECORD: n_fields 4; compact format; info bits 0</span><br><span class="line"> 0: len 4; hex 80000005; asc     ;;</span><br><span class="line"> 1: len 6; hex 000000005114; asc     Q ;;</span><br><span class="line"> 2: len 7; hex 01000001242299; asc     $&quot; ;;</span><br><span class="line"> 3: len 4; hex 80000005; asc     ;;</span><br></pre></td></tr></table></figure>
+
+<p><strong>PS:</strong> 如果指定区间[5,10],没有值为5和10的记录。insert 数据的时候，gap locks 会扩大到就近的存在记录的范围。如扩大到[3,15]</p>
+<h3 id="5-Insert-Intention-Locks"><a href="#5-Insert-Intention-Locks" class="headerlink" title="5. Insert Intention Locks"></a>5. Insert Intention Locks</h3><p>不同数据插入到相同索引间隙不需要等待，互不影响。</p>
+<h3 id="6-Next-Key-Locks"><a href="#6-Next-Key-Locks" class="headerlink" title="6. Next-Key Locks"></a>6. Next-Key Locks</h3><p>InnoDB在<code>REPEATABLE READ</code>事务隔离级别下，默认开启。其实就是record lock 和gap lock 组合使用。<br>官方文档写的范围</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">假设索引包含值10,11,13和20,</span><br><span class="line"></span><br><span class="line">(negative infinity, 10]</span><br><span class="line">(10, 11]</span><br><span class="line">(11, 13]</span><br><span class="line">(13, 20]</span><br><span class="line">(20, positive infinity)</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>mysql</tag>
+        <tag>innodb</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>线程池中Callable异常处理分析</title>
+    <url>/2019/07/10/catch-callable-exception/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>&emsp;&emsp;分析前几天遇到的一个老代码留下的坑。线程池中运行<code>Callable</code>线程时抛出的异常捕获不到，简化的逻辑如图,环境是jdk8：<br><img src="/img/catch_callable_exception-1.png" alt><br>运行结果：<br><img src="/img/catch_callable_exception-2.png" alt></p>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><ol>
+<li>线程池返回<code>Future&lt;&gt;</code>，调用其<code>get()</code></li>
+<li>在Callable中 try-catch可能抛错的异常<br><img src="/img/catch_callable_exception-3.png" alt><br>运行结果：<br><img src="/img/catch_callable_exception-4.png" alt><h3 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h3>&emsp;&emsp;不难发现线程池提交时创建的类为<code>FutureTask</code>。<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">  public &lt;T&gt; Future&lt;T&gt; submit(Callable&lt;T&gt; task) &#123;</span><br><span class="line">       if (task == null) throw new NullPointerException();</span><br><span class="line">       RunnableFuture&lt;T&gt; ftask = newTaskFor(task);</span><br><span class="line">       execute(ftask);</span><br><span class="line">       return ftask;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">protected &lt;T&gt; RunnableFuture&lt;T&gt; newTaskFor(Callable&lt;T&gt; callable) &#123;</span><br><span class="line">       return new FutureTask&lt;T&gt;(callable);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<p>看<code>FutureTask.run()</code>之前，先简单结束一下其关的属性。</p>
+<ul>
+<li>state：线程的状态。主要有如下几种：<ul>
+<li>NEW： 新建</li>
+<li>COMPLETING: 运行在</li>
+<li>NORMAL: 正常完成</li>
+<li>EXCEPTIONAL: 异常</li>
+<li>CANCELLED: 取消</li>
+<li>INTERRUPTING: 被中断的中间状态</li>
+<li>INTERRUPTED: 被中断的最终状态</li>
+</ul>
+</li>
+<li>outcome： get()返回值</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public void run() &#123;</span><br><span class="line">     if (state != NEW ||</span><br><span class="line">         !UNSAFE.compareAndSwapObject(this, runnerOffset,</span><br><span class="line">                                      null, Thread.currentThread()))</span><br><span class="line">         return;</span><br><span class="line">     try &#123;</span><br><span class="line">         Callable&lt;V&gt; c = callable;</span><br><span class="line">         if (c != null &amp;&amp; state == NEW) &#123;</span><br><span class="line">             V result;</span><br><span class="line">             boolean ran;</span><br><span class="line">             try &#123;</span><br><span class="line">                 result = c.call();</span><br><span class="line">                 ran = true;</span><br><span class="line">             &#125; catch (Throwable ex) &#123;</span><br><span class="line">                 result = null;</span><br><span class="line">                 ran = false;</span><br><span class="line">                 setException(ex);</span><br><span class="line">             &#125;</span><br><span class="line">             if (ran)</span><br><span class="line">                 set(result);</span><br><span class="line">         &#125;</span><br><span class="line">     &#125; finally &#123;</span><br><span class="line">         // runner must be non-null until state is settled to</span><br><span class="line">         // prevent concurrent calls to run()</span><br><span class="line">         runner = null;</span><br><span class="line">         // state must be re-read after nulling runner to prevent</span><br><span class="line">         // leaked interrupts</span><br><span class="line">         int s = state;</span><br><span class="line">         if (s &gt;= INTERRUPTING)</span><br><span class="line">             handlePossibleCancellationInterrupt(s);</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意这里</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">             try &#123;</span><br><span class="line">                 result = c.call();</span><br><span class="line">                 ran = true;</span><br><span class="line">             &#125; catch (Throwable ex) &#123;</span><br><span class="line">                 result = null;</span><br><span class="line">                 ran = false;</span><br><span class="line">                 setException(ex);</span><br><span class="line">             &#125;</span><br><span class="line"></span><br><span class="line">protected void setException(Throwable t) &#123;</span><br><span class="line">     if (UNSAFE.compareAndSwapInt(this, stateOffset, NEW, COMPLETING)) &#123;</span><br><span class="line">         outcome = t;</span><br><span class="line">         UNSAFE.putOrderedInt(this, stateOffset, EXCEPTIONAL); // final state</span><br><span class="line">         finishCompletion();</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>这里线程在运行时抛出异常时，<code>FutureTask</code>把异常信息赋值给<code>outcome</code>，并将<code>state</code>设为<code>EXCEPTIONAL</code>。</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public V get() throws InterruptedException, ExecutionException &#123;</span><br><span class="line">    int s = state;</span><br><span class="line">    if (s &lt;= COMPLETING)</span><br><span class="line">        s = awaitDone(false, 0L);</span><br><span class="line">    return report(s);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">private V report(int s) throws ExecutionException &#123;</span><br><span class="line">    Object x = outcome;</span><br><span class="line">    if (s == NORMAL)</span><br><span class="line">        return (V)x;</span><br><span class="line">    if (s &gt;= CANCELLED)</span><br><span class="line">        throw new CancellationException();</span><br><span class="line">    throw new ExecutionException((Throwable)x);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在调用get()时，如果运行时抛出异常，此时会抛出异常。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>&emsp;&emsp;这种坑还是代码规范的问题。<code>Callable</code>返回结果并没有被使用可以用<code>Runnable</code>代替;try-catch代码的习惯。</p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>ThreadPoolExecutor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>记MultipartException一次导致nginx500错误</title>
+    <url>/2019/08/04/nginx-500-due-to-zull-MultipartException/</url>
+    <content><![CDATA[<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>最近写了一个上传文件的接口，在小程序访问的时候,nginx报了500。看了nginx的 <code>error log</code> 发现并没有相关的错误日志。看了后台日志后，发现请求也没有进来。最后发现在zuul报了下面的错误…</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MultipartException: Could not parse multipart servlet request; </span><br><span class="line">nested exception is java.io.IOException: The temporary upload location</span><br><span class="line">[/tmp/tomcat.691065484080156170.9002/work/Tomcat/localhost/ROOT] is not valid</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决"><a href="#解决" class="headerlink" title="解决"></a>解决</h3><p>找到问题就好解决了，在zuul的配置文件中配置tomcat的临时文件目录既可<br><strong>server.tomcat.basedir</strong></p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>Exception</tag>
+        <tag>nginx</tag>
+        <tag>zull</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>使用HSDB验证Class对象和类的静态对象保存在堆中</title>
+    <url>/2019/10/17/use-HSDB-verify-Class-in-heap/</url>
+    <content><![CDATA[<h3 id="HSDB-Hotspot-Debugger"><a href="#HSDB-Hotspot-Debugger" class="headerlink" title="HSDB(Hotspot Debugger)"></a>HSDB(Hotspot Debugger)</h3><p>运行</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">图形界面    java -cp $JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.HSDB</span><br><span class="line">命令行      java -cp $JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.CLHSDB</span><br></pre></td></tr></table></figure>
+
+<p>本文使用的时命令行CLHSDB。<br>由于HSDB会先attach进程，然后暂停进程，所以线上慎用。。。</p>
+<h3 id="验证过程"><a href="#验证过程" class="headerlink" title="验证过程"></a>验证过程</h3><p>使用到的类</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">public class Main &#123;</span><br><span class="line">    private static String name = &quot;yuck&quot;;</span><br><span class="line">    private static int age = 24;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) throws IOException &#123;</span><br><span class="line">        new Main();</span><br><span class="line">        System.in.read();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>VM参数</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">-XX:+UseSerialGC  // 默认的XX:+UseParallelGC， 我在scanoops 会报no such type的异常，不知道是不是bug...</span><br><span class="line">-XX:-UseCompressedOops</span><br></pre></td></tr></table></figure>
+
+<p>找到进程pid ,attach</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">&gt; jps</span><br><span class="line">19852 Main</span><br><span class="line"></span><br><span class="line">&gt; java -cp $JAVA_HOME/lib/sa-jdi.jar sun.jvm.hotspot.HSDB</span><br><span class="line">&gt; attach 19852</span><br></pre></td></tr></table></figure>
+
+<p>查看堆中内存使用情况</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hsdb&gt; universe</span><br><span class="line">Heap Parameters:</span><br><span class="line">Gen 0:   eden [0x0000000012400000,0x0000000012961068,0x0000000013eb0000) space capacity = 27983872, 20.155523867461945 used</span><br><span class="line">  from [0x0000000013eb0000,0x0000000013eb0000,0x0000000014200000) space capacity = 3473408, 0.0 used</span><br><span class="line">  to   [0x0000000014200000,0x0000000014200000,0x0000000014550000) space capacity = 3473408, 0.0 usedInvocations: 0</span><br><span class="line"></span><br><span class="line">Gen 1:   old  [0x0000000014550000,0x0000000014550000,0x0000000018800000) space capacity = 69926912, 0.0 usedInvocations: 0</span><br></pre></td></tr></table></figure>
+
+<p>可以看到堆中目前只使用了eden区域存放数据。<br>在该区域扫描我们建的类</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hsdb&gt; scanoops 0x0000000012400000 0x0000000012961068 com.example.demo.Main</span><br><span class="line">0x000000001275f610 com/example/demo/Main</span><br><span class="line">hsdb&gt; whatis 0x000000001275f610</span><br><span class="line">Address 0x000000001275f610: In thread-local allocation buffer for thread &quot;main&quot; (1)  [0x000000001273ced0,0x000000001275f820,0x00000000127c70c0,&#123;0x00000000127c70d8&#125;)</span><br></pre></td></tr></table></figure>
+
+<p> 扫到我们要的类，使用<code>whatis</code>发现分配在TLAB中(我的环境时jdk8，默认TLAB优化时开启的)<br> 使用<code>inspect</code>进一步查看对象的信息<br> <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hsdb&gt; inspect 0x000000001275f610</span><br><span class="line">instance of Oop for com/example/demo/Main @ 0x000000001275f610 @ 0x000000001275f610 (size = 16)</span><br><span class="line">_mark: 1</span><br><span class="line">_metadata._klass: InstanceKlass for com/example/demo/Main</span><br></pre></td></tr></table></figure></p>
+<p> Main只有静态变量，所以对象实例大小为16byte,在64位关闭指针压缩的情况下 MARK WORLD(8byte) 加上类型指针(8byte,开启压缩是4byte) 正好是16byte。<br><strong>InstanceKlass就是指的是Class对象，所以这里就可以证明Class对象是存在堆中，而不是方法区</strong><br>使用<code>mem</code>找到具体地址 查看具体信息，<code>mem addresss length</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">hsdb&gt; mem 0x000000001275f610 2</span><br><span class="line">0x000000001275f610: 0x0000000000000001</span><br><span class="line">0x000000001275f618: 0x0000000018c03028</span><br><span class="line"></span><br><span class="line">hsdb&gt; whatis 0x0000000018c03028</span><br><span class="line">pointer to InstanceKlass</span><br><span class="line">hsdb&gt; inspect 0x0000000018c03028</span><br><span class="line">Type is InstanceKlass (size of 440)</span><br><span class="line">juint Klass::_super_check_offset: 48</span><br><span class="line">Klass* Klass::_secondary_super_cache: Klass @ null</span><br><span class="line">Array&lt;Klass*&gt;* Klass::_secondary_supers: Array&lt;Klass*&gt; @ 0x0000000018800f88</span><br><span class="line">Klass* Klass::_primary_supers[0]: Klass @ 0x0000000018801c00</span><br><span class="line">oop Klass::_java_mirror: Oop for java/lang/Class @ 0x000000001275d298 Oop for java/lang/Class @ 0x000000001275d298</span><br><span class="line">jint Klass::_modifier_flags: 1</span><br><span class="line">Klass* Klass::_super: Klass @ 0x0000000018801c00</span><br><span class="line">Klass* Klass::_subklass: Klass @ null</span><br><span class="line">jint Klass::_layout_helper: 16</span><br><span class="line">Symbol* Klass::_name: Symbol @ 0x0000000019af8fb0</span><br><span class="line">AccessFlags Klass::_access_flags: 538968097</span><br><span class="line">markOop Klass::_prototype_header: 5</span><br><span class="line">Klass* Klass::_next_sibling: Klass @ 0x0000000018b5c5f8</span><br><span class="line">u8 Klass::_trace_id: 42074112</span><br><span class="line">Klass* InstanceKlass::_array_klasses: Klass @ null</span><br><span class="line">Array&lt;Method*&gt;* InstanceKlass::_methods: Array&lt;Method*&gt; @ 0x0000000018c02d60</span><br><span class="line">Array&lt;Method*&gt;* InstanceKlass::_default_methods: Array&lt;Method*&gt; @ null</span><br><span class="line">Array&lt;Klass*&gt;* InstanceKlass::_local_interfaces: Array&lt;Klass*&gt; @ 0x0000000018800f88</span><br><span class="line">Array&lt;Klass*&gt;* InstanceKlass::_transitive_interfaces: Array&lt;Klass*&gt; @ 0x0000000018800f88</span><br><span class="line">Array&lt;u2&gt;* InstanceKlass::_fields: Array&lt;u2&gt; @ 0x0000000018c02d40</span><br><span class="line">u2 InstanceKlass::_java_fields_count: 2</span><br><span class="line">ConstantPool* InstanceKlass::_constants: ConstantPool @ 0x0000000018c02b70</span><br><span class="line">ClassLoaderData* InstanceKlass::_class_loader_data: ClassLoaderData @ 0x000000000300c090</span><br><span class="line">u2 InstanceKlass::_source_file_name_index: 30</span><br><span class="line">char* InstanceKlass::_source_debug_extension: char @ null</span><br><span class="line">Array&lt;jushort&gt;* InstanceKlass::_inner_classes: Array&lt;jushort&gt; @ 0x0000000018800f58</span><br><span class="line">int InstanceKlass::_nonstatic_field_size: 0</span><br><span class="line">int InstanceKlass::_static_field_size: 2</span><br><span class="line">u2 InstanceKlass::_static_oop_field_count: 1</span><br><span class="line">int InstanceKlass::_nonstatic_oop_map_size: 0</span><br><span class="line">bool InstanceKlass::_is_marked_dependent: 0</span><br><span class="line">u2 InstanceKlass::_minor_version: 0</span><br><span class="line">u2 InstanceKlass::_major_version: 52</span><br><span class="line">u1 InstanceKlass::_init_state: 4</span><br><span class="line">Thread* InstanceKlass::_init_thread: Thread @ 0x0000000002f14000</span><br><span class="line">int InstanceKlass::_vtable_len: 5</span><br><span class="line">int InstanceKlass::_itable_len: 2</span><br><span class="line">u1 InstanceKlass::_reference_type: 0</span><br><span class="line">OopMapCache* InstanceKlass::_oop_map_cache: OopMapCache @ null</span><br><span class="line">JNIid* InstanceKlass::_jni_ids: JNIid @ null</span><br><span class="line">nmethod* InstanceKlass::_osr_nmethods_head: nmethod @ null</span><br><span class="line">BreakpointInfo* InstanceKlass::_breakpoints: BreakpointInfo @ null</span><br><span class="line">u2 InstanceKlass::_generic_signature_index: 0</span><br><span class="line">jmethodID* InstanceKlass::_methods_jmethod_ids: jmethodID @ 0x0000000019af8ad0</span><br><span class="line">u2 InstanceKlass::_idnum_allocated_count: 3</span><br><span class="line">Annotations* InstanceKlass::_annotations: Annotations @ null</span><br><span class="line">nmethodBucket* InstanceKlass::_dependencies: nmethodBucket @ null</span><br><span class="line">Array&lt;int&gt;* InstanceKlass::_method_ordering: Array&lt;int&gt; @ 0x0000000018800f40</span><br><span class="line">Array&lt;int&gt;* InstanceKlass::_default_vtable_indices: Array&lt;int&gt; @ null</span><br></pre></td></tr></table></figure>
+
+<p> 可以看到Class信息中<br> <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">oop Klass::_java_mirror: Oop for java/lang/Class @ 0x000000001275d298 Oop for java/lang/Class @ 0x000000001275d298</span><br></pre></td></tr></table></figure></p>
+<p>  _java_mirror表示该Klass的Java层镜像类（在Java7中由镜像类持有类型的静态成员）</p>
+ <figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"> hsdb&gt; whatis 0x000000001275d298</span><br><span class="line">Address 0x000000001275d298: In thread-local allocation buffer for thread &quot;main&quot; (1)  [0x000000001273ced0,0x000000001275f820,0x00000000127c70c0,&#123;0x00000000127c70d8&#125;)</span><br><span class="line"></span><br><span class="line">hsdb&gt; inspect 0x000000001275d298</span><br><span class="line">instance of Oop for java/lang/Class @ 0x000000001275d298 @ 0x000000001275d298 (size = 176)</span><br><span class="line">name: &quot;yuck&quot; @ 0x000000001275f5b8 Oop for java/lang/String @ 0x000000001275f5b8</span><br><span class="line">age: 24</span><br></pre></td></tr></table></figure>
+
+<p>可以看到 该镜像中持有我们类中，创建的两个静态变量。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><p><a href="https://book.douban.com/subject/25847620/annotation" target="_blank" rel="noopener">https://book.douban.com/subject/25847620/annotation</a><br><a href="https://www.iteye.com/blog/rednaxelafx-730461#comments" target="_blank" rel="noopener">https://www.iteye.com/blog/rednaxelafx-730461#comments</a><br><a href="https://www.tuicool.com/articles/ryQv2iB" target="_blank" rel="noopener">https://www.tuicool.com/articles/ryQv2iB</a></p>
+]]></content>
+      <categories>
+        <category>技术</category>
+      </categories>
+      <tags>
+        <tag>java</tag>
+        <tag>JVM</tag>
+      </tags>
+  </entry>
+</search>
