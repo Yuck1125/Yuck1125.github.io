@@ -99,7 +99,7 @@
   <meta name="description" content="生活杂记">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Yuck的日常">
-<meta property="og:url" content="http://Yuck1125.github.io/tags/Mysql/index.html">
+<meta property="og:url" content="http://Yuck1125.github.io/tags/mysql/index.html">
 <meta property="og:site_name" content="Yuck的日常">
 <meta property="og:description" content="生活杂记">
 <meta property="og:locale" content="zh-CN">
@@ -115,7 +115,7 @@
 
   
   
-  <link rel="canonical" href="http://Yuck1125.github.io/tags/Mysql/">
+  <link rel="canonical" href="http://Yuck1125.github.io/tags/mysql/">
 
 
 
@@ -125,7 +125,7 @@
   };
 </script>
 
-  <title>标签: Mysql | Yuck的日常</title>
+  <title>标签: mysql | Yuck的日常</title>
   
 
 
@@ -383,7 +383,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>Mysql<small>标签</small>
+        <h1>mysql<small>标签</small>
         </h1>
       </div>
 
@@ -395,17 +395,43 @@
 
       <h2 class="post-title">
         
-          <a class="post-title-link" href="/2019/07/20/InnoDB-In-memory-and-on-disk-structures/" itemprop="url">
+          <a class="post-title-link" href="/2019/08/22/innodb-lock-type/" itemprop="url">
             
-              <span itemprop="name">InnoDB 内存和磁盘结构介绍</span>
+              <span itemprop="name">InnoDB锁类型</span>
             
           </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-07-20T21:11:47+08:00" content="2019-07-20">
-          07-20
+        <time class="post-time" itemprop="dateCreated" datetime="2019-08-22T17:28:43+08:00" content="2019-08-22">
+          08-22
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+          <a class="post-title-link" href="/2019/06/17/Note-on-mysql-interval-query/" itemprop="url">
+            
+              <span itemprop="name">mysql区间查询的注意点</span>
+            
+          </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-06-17T11:47:25+08:00" content="2019-06-17">
+          06-17
         </time>
       </div>
 
@@ -1053,60 +1079,6 @@
     $('.popup-trigger').click(function(e) {
       e.stopPropagation();
       if (isfetched === false) {
-        searchFunc(path, 'local-search-input', 'local-search-result');
-      } else {
-        proceedsearch();
-      };
-    });
-
-    $('.popup-btn-close').click(onPopupClose);
-    $('.popup').click(function(e){
-      e.stopPropagation();
-    });
-    $(document).on('keyup', function (event) {
-      var shouldDismissSearchPopup = event.which === 27 &&
-        $('.search-popup').is(':visible');
-      if (shouldDismissSearchPopup) {
-        onPopupClose();
-      }
-    });
-  </script>
-
-
-
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-</body>
-</html>
-     if (isfetched === false) {
         searchFunc(path, 'local-search-input', 'local-search-result');
       } else {
         proceedsearch();
